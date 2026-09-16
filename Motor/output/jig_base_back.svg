@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="94.8mm" height="94.8mm" viewBox="0 0 94.8 94.8">
+    <g id="jig_slots">
+        <g id="slot_1" transform="translate(79.8,15)">
+            <circle id="slot_1_circle" cx="0" cy="0" r="15" fill="none" stroke="#000000" stroke-width="0.1"/>
+        </g>
+        <g id="slot_2" transform="translate(47.4,15)">
+            <circle id="slot_2_circle" cx="0" cy="0" r="15" fill="none" stroke="#000000" stroke-width="0.1"/>
+        </g>
+        <g id="slot_3" transform="translate(15,15)">
+            <circle id="slot_3_circle" cx="0" cy="0" r="15" fill="none" stroke="#000000" stroke-width="0.1"/>
+        </g>
+        <g id="slot_4" transform="translate(79.8,47.4)">
+            <circle id="slot_4_circle" cx="0" cy="0" r="15" fill="none" stroke="#000000" stroke-width="0.1"/>
+        </g>
+        <g id="slot_5" transform="translate(47.4,47.4)">
+            <circle id="slot_5_circle" cx="0" cy="0" r="15" fill="none" stroke="#000000" stroke-width="0.1"/>
+        </g>
+        <g id="slot_6" transform="translate(15,47.4)">
+            <circle id="slot_6_circle" cx="0" cy="0" r="15" fill="none" stroke="#000000" stroke-width="0.1"/>
+        </g>
+        <g id="slot_7" transform="translate(79.8,79.8)">
+            <circle id="slot_7_circle" cx="0" cy="0" r="15" fill="none" stroke="#000000" stroke-width="0.1"/>
+        </g>
+        <g id="slot_8" transform="translate(47.4,79.8)">
+            <circle id="slot_8_circle" cx="0" cy="0" r="15" fill="none" stroke="#000000" stroke-width="0.1"/>
+        </g>
+        <g id="slot_9" transform="translate(15,79.8)">
+            <circle id="slot_9_circle" cx="0" cy="0" r="15" fill="none" stroke="#000000" stroke-width="0.1"/>
+        </g>
+    </g>
+</svg>
