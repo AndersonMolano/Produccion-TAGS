@@ -195,23 +195,33 @@ def generar_pdf_sobres(csv_file):
     fecha = datetime.datetime.now()
     mes = fecha.strftime("%b").title()
 
-    FONDO = "Dependencias/Fondo/Envelope (Sobre) Pet Tag.png"
-    FUENTE = "Dependencias/Fuente/KGLegoHouse.ttf"
+    FONDO = "Dependencias/Fondo/Envelope V.5_3.png"
+    FUENTE = "Dependencias/Fuente/Caramel.ttf"
     SALIDA = f"Envelopes {mes}.{fecha.day:02d}.{fecha.year} - Lot 1.pdf"
 
     # ==============================
     # AJUSTES DEL DISEÑO
     # ==============================
 
-    NOMBRE_SIZE = 70
-    NOMBRE_Y = 195
+    INTERLINEADO = 1.1
 
-    CODIGO_SIZE = 14
-    CODIGO_X = 40
-    CODIGO_Y = 68
+    # Nombre de 1 línea
+    NOMBRE_SIZE = 1900
+    NOMBRE_Y = 3500
+
+    # Nombre de 2 líneas (Y = posición de la PRIMERA línea)
+    NOMBRE_SIZE_DOS_LINEAS = 1650
+    NOMBRE_Y_DOS_LINEAS = 4300
+
+    CODIGO_SIZE = 350
+    CODIGO_X = 450
+    CODIGO_Y = 2050
 
     img = Image.open(FONDO)
     ancho, alto = img.size
+
+    # Se crea una sola vez (con una imagen tan grande, hacerlo en cada página es lento)
+    fondo_reader = ImageReader(img)
 
     pdf = canvas.Canvas(SALIDA, pagesize=(ancho, alto))
 
@@ -219,14 +229,14 @@ def generar_pdf_sobres(csv_file):
     # CARGAR FUENTE
     # ==============================
 
-    nombre_fuente = "Helvetica"
+    nombre_fuente = "Helvetica-Bold"
 
     if os.path.exists(FUENTE):
-        pdfmetrics.registerFont(TTFont("LEGO", FUENTE))
-        nombre_fuente = "LEGO"
-        print("✅ Fuente LEGO cargada")
+        pdfmetrics.registerFont(TTFont("FuentePrincipal", FUENTE))
+        nombre_fuente = "FuentePrincipal"
+        print(f"✅ Fuente cargada: {FUENTE}")
     else:
-        print("⚠️ No se encontró la fuente. Se utilizará Helvetica.")
+        print(f"⚠️ No se encontró la fuente: {FUENTE}. Se utilizará Helvetica-Bold.")
 
     # ==============================
     # LEER EL CSV
@@ -236,22 +246,38 @@ def generar_pdf_sobres(csv_file):
 
     for _, fila in df.iterrows():
 
-        nombre = str(fila["Nombre"])
+        nombre = "" if pd.isna(fila["Nombre"]) else str(fila["Nombre"])
         codigo = str(fila["Codigo"])
 
         # Fondo
         pdf.drawImage(
-            ImageReader(img),
+            fondo_reader,
             0,
             0,
             width=ancho,
             height=alto
         )
 
-        # Nombre
+        # Nombre (1 o 2 líneas)
         pdf.setFillColorRGB(0, 0, 0)
-        pdf.setFont(nombre_fuente, NOMBRE_SIZE)
-        pdf.drawCentredString(ancho / 2, NOMBRE_Y, nombre)
+
+        partes = nombre.strip().split()
+
+        if len(partes) >= 2:
+            lineas = [partes[0], " ".join(partes[1:])]
+            size = NOMBRE_SIZE_DOS_LINEAS
+            y_inicial = NOMBRE_Y_DOS_LINEAS
+        else:
+            lineas = partes
+            size = NOMBRE_SIZE
+            y_inicial = NOMBRE_Y
+
+        pdf.setFont(nombre_fuente, size)
+        salto = size * INTERLINEADO
+
+        for i, linea in enumerate(lineas):
+            y = y_inicial - (i * salto)
+            pdf.drawCentredString(ancho / 2, y, linea)
 
         # Código
         pdf.saveState()
@@ -290,7 +316,7 @@ def generar_pdf_sobres(csv_file):
         os.remove(SALIDA)
 
     print("✅ Archivo temporal eliminado.")
-
+    
 def _normalizar_ruta_reporte(ruta_reporte):
     """Convierte la ruta recibida por el orquestador en una ruta absoluta válida."""
     ruta = os.path.abspath(os.fspath(ruta_reporte))
